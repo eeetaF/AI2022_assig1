@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class Main {
-    static int algorithm, winsA = 0, losesA = 0;
     static final int n = 9;
 
     public static void main(String[] args) {
@@ -37,6 +36,8 @@ public class Main {
             }
         }
 
+        int algorithm, winsA = 0, winsB = 0, losesA = 0, losesB = 0;
+        double[] timesA = new double[1000], timesB = new double[1000];
         if (Choice != '3') {
             // set algorithm
             System.out.print("Choose algorithm (1 - A*, 2 - Backtracking): ");
@@ -89,10 +90,13 @@ public class Main {
                 System.out.println("Time from beginning: " + (System.nanoTime() - begin) / 1000000000 + " sec");
 
                 System.out.println("A*");
-                long start = System.nanoTime();
+                double start = System.nanoTime();
                 resultA = A_star.start(map);
-                long finish = System.nanoTime();
-                long timeElapsed = finish - start;
+                double finish = System.nanoTime();
+                double timeElapsed = finish - start;
+                timesA[i] = timeElapsed;
+                if (resultA != -1) winsA++;
+                else losesA++;
                 System.out.println("Time elapsed: " + timeElapsed / 1000000 + " ms");
                 System.out.println("Result: " + resultA);
                 System.out.println();
@@ -102,17 +106,75 @@ public class Main {
                 resultB = Backtracking.start(map);
                 finish = System.nanoTime();
                 timeElapsed = finish - start;
+                timesB[i] = timeElapsed;
+                if (resultB != -1) winsB++;
+                else losesB++;
                 System.out.println("Time elapsed: " + timeElapsed / 1000000 + " ms");
                 System.out.println("Result: " + resultB);
                 System.out.println();
                 if (resultA != resultB) {
                     break;
                 }
-
                 Algorithms.clearMap(map);
                 Algorithms.generateMap(map);
             }
         }
+
+        double meanA = 0, meanB = 0, modeMedianA, modeMedianB, standardDeviationA = 0, standardDeviationB = 0;
+        for (int i = 0; i < 1000; i++) {
+            meanA += timesA[i];
+            meanB += timesB[i];
+        }
+        for (int i = 0; i < 1000; i++) {
+            for (int j = 0; j < 1000 - i - 1; j++) {
+                if (timesA[j] > timesA[j + 1]) {
+                    double temp = timesA[j];
+                    timesA[j] = timesA[j + 1];
+                    timesA[j + 1] = temp;
+                }
+                if (timesB[j] > timesB[j + 1]) {
+                    double temp = timesB[j];
+                    timesB[j] = timesB[j + 1];
+                    timesB[j + 1] = temp;
+                }
+            }
+        }
+        meanA /= 1000;
+        meanB /= 1000;
+        meanA /= 1000000; // ms
+        meanB /= 1000000; // ms
+        modeMedianA = (timesA[499] + timesA[500]) / 2;
+        modeMedianB = (timesB[499] + timesB[500]) / 2;
+        modeMedianA /= 1000000; // ms
+        modeMedianB /= 1000000; // ms
+        for (int i = 0; i < 1000; i++) {
+            standardDeviationA += Math.pow(timesA[i] / 1000000 - meanA, 2);
+            standardDeviationB += Math.pow(timesB[i] / 1000000 - meanB, 2);
+        }
+        standardDeviationA /= 999;
+        standardDeviationB /= 999;
+        standardDeviationA = Math.sqrt(standardDeviationA);
+        standardDeviationB = Math.sqrt(standardDeviationB);
+
+
+        try {
+            FileWriter myWriter = new FileWriter("Statistical_Analysis.txt");
+            myWriter.write("A*:\n");
+            myWriter.write("Wins: " + winsA + "\n");
+            myWriter.write("Loses: " + losesA + "\n");
+            myWriter.write("Win rate: " + (double) winsA / generations * 100 + "%\n");
+            myWriter.write("Mean: " + meanA + " ms\n");
+            myWriter.write("Mode-Median: " + modeMedianA + " ms\n");
+            myWriter.write("Standard deviation: " + standardDeviationA + " ms\n");
+            myWriter.write("\nBacktracking:\n");
+            myWriter.write("Wins: " + winsB + "\n");
+            myWriter.write("Loses: " + losesB + "\n");
+            myWriter.write("Win rate: " + (double) winsB / generations * 100 + "%\n");
+            myWriter.write("Mean: " + meanB + " ms\n");
+            myWriter.write("Mode-Median: " + modeMedianB + " ms\n");
+            myWriter.write("Standard deviation: " + standardDeviationB + " ms\n");
+            myWriter.close();
+        } catch (Exception ignored) {}
         sc.close();
     }
 

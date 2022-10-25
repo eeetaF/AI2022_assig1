@@ -1,0 +1,15 @@
+A*:
+Wins: 918
+Loses: 82
+Win rate: 91.8%
+Mean: 0.5615652 ms
+Mode-Median: 0.5304 ms
+Standard deviation: 0.5223618829755343 ms
+
+Backtracking:
+Wins: 918
+Loses: 82
+Win rate: 91.8%
+Mean: 45.750842799999994 ms
+Mode-Median: 1.73595 ms
+Standard deviation: 287.593142040059 ms
