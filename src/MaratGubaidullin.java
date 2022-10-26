@@ -3,7 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-public class Main {
+public class MaratGubaidullin {
     static final int n = 9;
 
     public static void main(String[] args) {
@@ -118,66 +118,71 @@ public class Main {
                 Algorithms.clearMap(map);
                 Algorithms.generateMap(map);
             }
-        }
 
-        double meanA = 0, meanB = 0, modeMedianA, modeMedianB, standardDeviationA = 0, standardDeviationB = 0;
-        for (int i = 0; i < 1000; i++) {
-            meanA += timesA[i];
-            meanB += timesB[i];
-        }
-        for (int i = 0; i < 1000; i++) {
-            for (int j = 0; j < 1000 - i - 1; j++) {
-                if (timesA[j] > timesA[j + 1]) {
-                    double temp = timesA[j];
-                    timesA[j] = timesA[j + 1];
-                    timesA[j + 1] = temp;
-                }
-                if (timesB[j] > timesB[j + 1]) {
-                    double temp = timesB[j];
-                    timesB[j] = timesB[j + 1];
-                    timesB[j + 1] = temp;
+            double meanA = 0, meanB = 0, modeMedianA, modeMedianB, standardDeviationA = 0, standardDeviationB = 0;
+            for (int i = 0; i < 1000; i++) {
+                meanA += timesA[i];
+                meanB += timesB[i];
+            }
+            for (int i = 0; i < 1000; i++) {
+                for (int j = 0; j < 1000 - i - 1; j++) {
+                    if (timesA[j] > timesA[j + 1]) {
+                        double temp = timesA[j];
+                        timesA[j] = timesA[j + 1];
+                        timesA[j + 1] = temp;
+                    }
+                    if (timesB[j] > timesB[j + 1]) {
+                        double temp = timesB[j];
+                        timesB[j] = timesB[j + 1];
+                        timesB[j + 1] = temp;
+                    }
                 }
             }
-        }
-        meanA /= 1000;
-        meanB /= 1000;
-        meanA /= 1000000; // ms
-        meanB /= 1000000; // ms
-        modeMedianA = (timesA[499] + timesA[500]) / 2;
-        modeMedianB = (timesB[499] + timesB[500]) / 2;
-        modeMedianA /= 1000000; // ms
-        modeMedianB /= 1000000; // ms
-        for (int i = 0; i < 1000; i++) {
-            standardDeviationA += Math.pow(timesA[i] / 1000000 - meanA, 2);
-            standardDeviationB += Math.pow(timesB[i] / 1000000 - meanB, 2);
-        }
-        standardDeviationA /= 999;
-        standardDeviationB /= 999;
-        standardDeviationA = Math.sqrt(standardDeviationA);
-        standardDeviationB = Math.sqrt(standardDeviationB);
+            meanA /= 1000;
+            meanB /= 1000;
+            meanA /= 1000000; // ms
+            meanB /= 1000000; // ms
+            modeMedianA = (timesA[499] + timesA[500]) / 2;
+            modeMedianB = (timesB[499] + timesB[500]) / 2;
+            modeMedianA /= 1000000; // ms
+            modeMedianB /= 1000000; // ms
+            for (int i = 0; i < 1000; i++) {
+                standardDeviationA += Math.pow(timesA[i] / 1000000 - meanA, 2);
+                standardDeviationB += Math.pow(timesB[i] / 1000000 - meanB, 2);
+            }
+            standardDeviationA /= 999;
+            standardDeviationB /= 999;
+            standardDeviationA = Math.sqrt(standardDeviationA);
+            standardDeviationB = Math.sqrt(standardDeviationB);
 
 
-        try {
-            FileWriter myWriter = new FileWriter("Statistical_Analysis.txt");
-            myWriter.write("A*:\n");
-            myWriter.write("Wins: " + winsA + "\n");
-            myWriter.write("Loses: " + losesA + "\n");
-            myWriter.write("Win rate: " + (double) winsA / generations * 100 + "%\n");
-            myWriter.write("Mean: " + meanA + " ms\n");
-            myWriter.write("Mode-Median: " + modeMedianA + " ms\n");
-            myWriter.write("Standard deviation: " + standardDeviationA + " ms\n");
-            myWriter.write("\nBacktracking:\n");
-            myWriter.write("Wins: " + winsB + "\n");
-            myWriter.write("Loses: " + losesB + "\n");
-            myWriter.write("Win rate: " + (double) winsB / generations * 100 + "%\n");
-            myWriter.write("Mean: " + meanB + " ms\n");
-            myWriter.write("Mode-Median: " + modeMedianB + " ms\n");
-            myWriter.write("Standard deviation: " + standardDeviationB + " ms\n");
-            myWriter.close();
-        } catch (Exception ignored) {}
+            try {
+                FileWriter myWriter = new FileWriter("Statistical_Analysis.txt");
+                myWriter.write("A*:\n");
+                myWriter.write("Wins: " + winsA + "\n");
+                myWriter.write("Loses: " + losesA + "\n");
+                myWriter.write("Win rate: " + (double) winsA / generations * 100 + "%\n");
+                myWriter.write("Mean: " + meanA + " ms\n");
+                myWriter.write("Mode-Median: " + modeMedianA + " ms\n");
+                myWriter.write("Standard deviation: " + standardDeviationA + " ms\n");
+                myWriter.write("\nBacktracking:\n");
+                myWriter.write("Wins: " + winsB + "\n");
+                myWriter.write("Loses: " + losesB + "\n");
+                myWriter.write("Win rate: " + (double) winsB / generations * 100 + "%\n");
+                myWriter.write("Mean: " + meanB + " ms\n");
+                myWriter.write("Mode-Median: " + modeMedianB + " ms\n");
+                myWriter.write("Standard deviation: " + standardDeviationB + " ms\n");
+                myWriter.close();
+            } catch (Exception ignored) {}
+        }
+
+
         sc.close();
     }
 
+    /**
+     * Cell enum for map
+     */
     public enum Cell {
         // Empty, Jack, Davy, Kraken, Rock, Tortuga, Chest, dangerZone
         E, J, D, K, R, T, C, Z, JZ, KR
@@ -185,7 +190,13 @@ public class Main {
         // KR - Special case, Kraken and Rock cell
     }
 
+    /**
+     * Class that contains general methods for the algorithms and maps
+     */
     public static class Algorithms {
+        /**
+         * @return an empty map nxn
+         */
         public static ArrayList<ArrayList<Cell>> generateInitialMap() {
             ArrayList<ArrayList<Cell>> map = new ArrayList<>();
             for (int i = 0; i < n; i++) {
@@ -197,12 +208,18 @@ public class Main {
             return map;
         }
 
+        /**
+         * @param map the map to be cleared
+         */
         public static void clearMap(ArrayList<ArrayList<Cell>> map) {
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++)
                     map.get(i).set(j, Cell.E);
         }
 
+        /**
+         * @param map the map to be printed
+         */
         public static void printMap(ArrayList<ArrayList<Cell>> map) {
             for (int i = 0; i < n * 2 + 1; i++)
                 System.out.print("-");
@@ -235,6 +252,9 @@ public class Main {
             System.out.println();
         }
 
+        /**
+         * @param map the map is to be filled in from a file
+         */
         public static void readMapFromFile(ArrayList<ArrayList<Cell>> map) {
             try {
                 Scanner sc = new Scanner(new File("input.txt"));
@@ -245,6 +265,24 @@ public class Main {
 
         }
 
+        /**
+         * @param map the map is to be filled in from the console
+         */
+        public static void readMapFromConsole(ArrayList<ArrayList<Cell>> map) {
+            try {
+                Scanner sc = new Scanner(System.in);
+                readMap(map, sc);
+            } catch (Exception e) {
+                System.out.println("Input is invalid, try again!");
+                Algorithms.clearMap(map);
+                Algorithms.readMapFromConsole(map);
+            }
+        }
+
+        /**
+         * @param map the map is to be filled in
+         * @param sc the scanner (file/console etc.)
+         */
         public static void readMap(ArrayList<ArrayList<Cell>> map, Scanner sc) throws Exception {
             for (int i = 0; i < 6; i++) {
                 String coordinates = sc.next();
@@ -291,17 +329,9 @@ public class Main {
             sc.close();
         }
 
-        public static void readMapFromConsole(ArrayList<ArrayList<Cell>> map) {
-            try {
-                Scanner sc = new Scanner(System.in);
-                readMap(map, sc);
-            } catch (Exception e) {
-                System.out.println("Input is invalid, try again!");
-                Algorithms.clearMap(map);
-                Algorithms.readMapFromConsole(map);
-            }
-        }
-
+        /**
+         * @param map the map is to be filled in by random generation
+         */
         public static void generateMap(ArrayList<ArrayList<Cell>> map) {
             // Jack
             map.get(0).set(0, Cell.J);
@@ -357,6 +387,12 @@ public class Main {
             }
         }
 
+        /**
+         * Method to fill in the danger zone of Davy Jones, used by both algorithms
+         * @param map the map with Davy
+         * @param x the x coordinate of Davy
+         * @param y the y coordinate of Davy
+         */
         public static void FillDangerDavy(ArrayList<ArrayList<Cell>> map, int x, int y) {
             if (x + 1 < n) map.get(x + 1).set(y, Cell.Z);
             if (x - 1 >= 0) map.get(x - 1).set(y, Cell.Z);
@@ -369,6 +405,12 @@ public class Main {
             if (map.get(0).get(0) == Cell.Z) map.get(0).set(0, Cell.JZ);
         }
 
+        /**
+         * Method to fill in the danger zone of Davy, used only by A*
+         * @param map the map with Davy
+         * @param x the x coordinate of Davy
+         * @param y the y coordinate of Davy
+         */
         public static void FillDangerDavyM(ArrayList<ArrayList<A_star_node>> map, int x, int y) {
             if (x + 1 < n) map.get(x + 1).get(y).cell = Cell.Z;
             if (x - 1 >= 0) map.get(x - 1).get(y).cell = Cell.Z;
@@ -380,6 +422,12 @@ public class Main {
             if (x - 1 >= 0 && y - 1 >= 0) map.get(x - 1).get(y - 1).cell = Cell.Z;
         }
 
+        /**
+         * Method to fill in the danger zone of Kraken, used by both algorithms
+         * @param map the map with Kraken
+         * @param x the x coordinate of Kraken
+         * @param y the y coordinate of Kraken
+         */
         public static void FillDangerKraken(ArrayList<ArrayList<Cell>> map, int x, int y) {
             if (x + 1 < n && map.get(x + 1).get(y) != Cell.D) map.get(x + 1).set(y, Cell.Z);
             if (x - 1 >= 0 && map.get(x - 1).get(y) != Cell.D) map.get(x - 1).set(y, Cell.Z);
@@ -388,6 +436,9 @@ public class Main {
             if (map.get(0).get(0) == Cell.Z) map.get(0).set(0, Cell.JZ);
         }
 
+        /**
+         * Class based on ArrayList to store both x and y coordinates
+         */
         public static class PairedArrayList {
             public ArrayList<Integer> xCells, yCells;
 
@@ -435,18 +486,66 @@ public class Main {
                 }
             }
         }
+
+        /**
+         * Writes the path to the file
+         * @param path the path to write
+         * @param myWriter contains the name of the file
+         */
+        public static void WritePath(Algorithms.PairedArrayList path, FileWriter myWriter) throws IOException {
+            if (path.size() != 0) {
+                myWriter.write("Win\n" + (path.size() - 1) + "\n");
+                for (int i = 0; i < path.size(); i++) {
+                    myWriter.write("[" + path.xCells.get(i) + "," + path.yCells.get(i) + "] ");
+                }
+                myWriter.write("\n");
+                for (int i = 0; i < n * 2 + 1; i++) {
+                    myWriter.write("-");
+                }
+                myWriter.write("\n ");
+                for (int i = 0; i < n; i++) {
+                    myWriter.write(" " + i);
+                }
+                myWriter.write("\n");
+                for (int i = 0; i < n; i++) {
+                    myWriter.write(i + " ");
+                    for (int j = 0; j < n; j++) {
+                        if (path.contains(i, j)) {
+                            myWriter.write("* ");
+                        } else {
+                            myWriter.write("- ");
+                        }
+                    }
+                    myWriter.write("\n");
+                }
+                for (int i = 0; i < n * 2 + 1; i++) {
+                    myWriter.write("-");
+                }
+            } else {
+                myWriter.write("Lose");
+            }
+            myWriter.write("\n");
+            myWriter.close();
+        }
     }
 
+    /**
+     * A* solving algorithm
+     */
     public static class A_star {
         // way 1 - Jack -> Chest
         // way 2 - Jack -> Tortuga -> (Kraken) -> Chest
         static int shortest1, shortest2;
         static A_star_node jack, chest, tortuga, davy;
         static ArrayList<A_star_node> sortedList;
-        static ArrayList<A_star_node> foundPath2, foundPath1;
+        static ArrayList<A_star_node> foundPath1, foundPath2;
         static ArrayList<ArrayList<A_star_node>> nodeMap;
 
-        // returns an integer - minimum number of moves to get to the chest (-1 if impossible)
+
+        /**
+         * @param map the game map
+         * @return the shortest number of moves to get the chest (-1 if impossible)
+         */
         public static int start(ArrayList<ArrayList<Cell>> map) {
             if (map.get(0).get(0) == Cell.JZ) return -1;
 
@@ -496,6 +595,9 @@ public class Main {
             }
         }
 
+        /**
+         * Method to find the shortest way from Jack to Chest
+         */
         public static void findShortest1() {
             sortedList = new ArrayList<>();
             // set p of every node
@@ -528,7 +630,14 @@ public class Main {
                 foundPath1 = foundPath2;
         }
 
-        public static boolean findShortest2(A_star_node start, A_star_node end) {
+        /**
+         * Method to find the shortest way from Jack to Tortuga and from Tortuga to Chest
+         *
+         * @param start  the node to start from
+         * @param target the node to end on
+         * @return true if the target node was found, false if not or if found chest while searching for tortuga
+         */
+        public static boolean findShortest2(A_star_node start, A_star_node target) {
             int a = 0, x = 0, y = 0;
             boolean flag = false;
             if (start != jack) {
@@ -545,7 +654,7 @@ public class Main {
             // set p of every node
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
-                    nodeMap.get(i).get(j).p = Math.max(Math.abs(start.x - end.x), Math.abs(start.y - end.y));
+                    nodeMap.get(i).get(j).p = Math.max(Math.abs(start.x - target.x), Math.abs(start.y - target.y));
                 }
             }
             nodeMap.get(x).get(y).set_a(a);
@@ -572,6 +681,13 @@ public class Main {
             }
         }
 
+        /**
+         * Method that checks if the cells around the current cell are accessible
+         * @param currentNode the current cell
+         * @param nodeMap the map of nodes
+         * @param flag true if searching for tortuga, false if searching for chest
+         * @return the node of the chest if looking for chest, the node of the tortuga if looking for tortuga, null if not found
+         */
         public static A_star_node inspectArea(A_star_node currentNode, ArrayList<ArrayList<A_star_node>> nodeMap, boolean flag) {
             if (currentNode.x + 1 < n) {
                 A_star_node radNode = nodeMap.get(currentNode.x + 1).get(currentNode.y);
@@ -608,6 +724,41 @@ public class Main {
             return null;
         }
 
+        /**
+         * Method that checks the "connection type" between two nodes, good means that the node is passable,
+         * bad means that the node is not passable
+         * @param currentNode the current cell
+         * @param radNode the cell to check
+         * @param flag true if searching for tortuga, false if searching for chest
+         * @return true if found the chest while looking for chest or if found tortuga while looking for tortuga, false if neither
+         */
+        private static boolean DefineConnectionType(A_star_node currentNode, A_star_node radNode, boolean flag) {
+            Cell radCell;
+            radCell = radNode.cell;
+            if (radCell == Cell.C || (radCell == Cell.T && flag)) {
+                radNode.connect_good_nodes(currentNode);
+                findPath(radNode);
+                return true;
+            }
+            if (radCell == Cell.Z || radCell == Cell.D || radCell == Cell.R || radCell == Cell.K || radCell == Cell.KR) {
+                radNode.connect_bad_nodes(currentNode);
+                return false;
+            }
+            if (radCell == Cell.T) {
+                radNode.tortugaPassed = true;
+            }
+            if (radNode.connect_good_nodes(currentNode)) {
+                sortedList.add(radNode);
+                sortedList.sort(Comparator.comparingInt(o -> o.sum));
+            }
+            return false;
+        }
+
+        /**
+         * Method that is looking for kraken around the currentNode and kills it if it is found
+         * USED ONLY IF TORTUGA IS PASSED
+         * @param currentNode the node around which to look for kraken
+         */
         public static void findKrakenInArea(A_star_node currentNode) {
             if (currentNode.x + 1 < n) {
                 A_star_node radNode = nodeMap.get(currentNode.x + 1).get(currentNode.y);
@@ -666,28 +817,10 @@ public class Main {
             }
         }
 
-        private static boolean DefineConnectionType(A_star_node currentNode, A_star_node radNode, boolean flag) {
-            Cell radCell;
-            radCell = radNode.cell;
-            if (radCell == Cell.C || (radCell == Cell.T && flag)) {
-                radNode.connect_good_nodes(currentNode);
-                findPath(radNode);
-                return true;
-            }
-            if (radCell == Cell.Z || radCell == Cell.D || radCell == Cell.R || radCell == Cell.K || radCell == Cell.KR) {
-                radNode.connect_bad_nodes(currentNode);
-                return false;
-            }
-            if (radCell == Cell.T) {
-                radNode.tortugaPassed = true;
-            }
-            if (radNode.connect_good_nodes(currentNode)) {
-                sortedList.add(radNode);
-                sortedList.sort(Comparator.comparingInt(o -> o.sum));
-            }
-            return false;
-        }
-
+        /**
+         * Method that fills the foundPath2 list with the path from the jack to tortuga or chest
+         * @param node the last node in the path (chest or tortuga)
+         */
         public static void findPath(A_star_node node) {
             A_star_node currentNode = node;
             ArrayList<A_star_node> temp = new ArrayList<>();
@@ -704,6 +837,10 @@ public class Main {
             foundPath2.addAll(temp);
         }
 
+        /**
+         * Method that kills the kraken on the map
+         * @param kraken the node of kraken (must be on the map)
+         */
         public static void killKraken(A_star_node kraken) {
             if (kraken.cell == Cell.KR)
                 kraken.cell = Cell.R;
@@ -724,6 +861,9 @@ public class Main {
             Algorithms.FillDangerDavyM(nodeMap, davy.x, davy.y);
         }
 
+        /**
+         * Fills the nodeMap with empty nodes
+         */
         public static void resetNodeMap() {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
@@ -732,6 +872,11 @@ public class Main {
             }
         }
 
+        /**
+         * Method that parses the ArrayList of nodes to PairedArrayList
+         * (two array lists of corresponding coordinates x and y) and sends it to print
+         * @param path the path to parse and print
+         */
         public static void parsePath(ArrayList<A_star_node> path) {
             Algorithms.PairedArrayList parsedPath = new Algorithms.PairedArrayList();
             if (path != null)
@@ -742,14 +887,21 @@ public class Main {
             printPath(parsedPath);
         }
 
+        /**
+         * Method that prints the path to the file
+         * @param path the path to print
+         */
         public static void printPath(Algorithms.PairedArrayList path) {
             try {
                 FileWriter myWriter = new FileWriter("outputAStar.txt");
-                Backtracking.WritePath(path, myWriter);
+                Algorithms.WritePath(path, myWriter);
             } catch (Exception ignored) {}
         }
     }
 
+    /**
+     * Node class for A* algorithm only
+     */
     public static class A_star_node {
         public int a, p, sum, x, y;
         // Actual cost, Potential cost, Sum = a + p, (x,y) - coordinates
@@ -757,6 +909,12 @@ public class Main {
         public boolean tortugaPassed;
         public ArrayList<A_star_node> parents;
 
+
+        /**
+         * @param x x coordinate
+         * @param y y coordinate
+         * @param cell cell type
+         */
         public A_star_node(int x, int y, Cell cell) {
             parents = new ArrayList<>();
             a = -1;
@@ -768,11 +926,21 @@ public class Main {
             tortugaPassed = false;
         }
 
+
+        /**
+         * @param a actual cost
+         */
         public void set_a(int a) {
             this.a = a;
             this.sum = a + p;
         }
 
+
+        /**
+         * Method that connects passable nodes (parent_node and this)
+         * @param parent_node node that we came from
+         * @return true if passed parent_node is not worse than current parent_node(s) and connected, false otherwise
+         */
         public boolean connect_good_nodes(A_star_node parent_node) {
             if (parents.contains(parent_node))
                 return false;
@@ -794,6 +962,10 @@ public class Main {
             return false;
         }
 
+        /**
+         * Method that connects this node (not passable node) with parent_node
+         * @param parent_node node that we came from
+         */
         public void connect_bad_nodes(A_star_node parent_node) {
             this.parents.clear();
             this.parents.add(parent_node);
@@ -801,14 +973,23 @@ public class Main {
         }
     }
 
+    /**
+     * Backtracking solving algorithm
+     */
     public static class Backtracking {
         // way 1 - Jack -> Chest
         // way 2 - Jack -> Tortuga -> (Kraken) -> Chest
-        static int shortest2t, shortest1, shortest2, xtortuga, ytortuga, xchest, ychest, maxSteps, xdavy, ydavy, xkraken, ykraken;
-        static long iterations, maxiterations1 = Integer.MAX_VALUE, maxiterations2 = Integer.MAX_VALUE;
+        // maxIterations is used to prevent infinite loops in case of not passable map
+        static int shortest2t, shortest1, shortest2, xTortuga, yTortuga, xChest, yChest, maxSteps, xDavy, yDavy, xKraken, yKraken;
+        static long iterations, maxIterations = Integer.MAX_VALUE;
         static Algorithms.PairedArrayList foundPath1, foundPath2, tempFoundPath2;
         static ArrayList<ArrayList<Cell>> noKrakenMap, mapWithKraken;
 
+        /**
+         * Method that solves the problem using backtracking algorithm
+         * @param map map to solve
+         * @return the shortest number of moves to get the chest (-1 if impossible)
+         */
         public static int start(ArrayList<ArrayList<Cell>> map) {
             shortest1 = -1;
             shortest2 = -1;
@@ -836,6 +1017,9 @@ public class Main {
             }
         }
 
+        /**
+         * Method that finds the shortest way to get the chest without visiting Tortuga and killing Kraken
+         */
         public static void findShortest1() {
             if (mapWithKraken.get(0).get(0) == Cell.JZ) {
                 shortest1 = -1;
@@ -845,20 +1029,20 @@ public class Main {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     if (mapWithKraken.get(i).get(j) == Cell.C) {
-                        xchest = i;
-                        ychest = j;
+                        xChest = i;
+                        yChest = j;
                     }
                     if (mapWithKraken.get(i).get(j) == Cell.T) {
-                        xtortuga = i;
-                        ytortuga = j;
+                        xTortuga = i;
+                        yTortuga = j;
                     }
                     if (mapWithKraken.get(i).get(j) == Cell.D) {
-                        xdavy = i;
-                        ydavy = j;
+                        xDavy = i;
+                        yDavy = j;
                     }
                     if (mapWithKraken.get(i).get(j) == Cell.K || mapWithKraken.get(i).get(j) == Cell.KR) {
-                        xkraken = i;
-                        ykraken = j;
+                        xKraken = i;
+                        yKraken = j;
                     }
                 }
             }
@@ -868,18 +1052,26 @@ public class Main {
             findRec1(0, 0, 0, new Algorithms.PairedArrayList());
         }
 
+        /**
+         * Recursive method that finds the shortest way to get the chest without visiting Tortuga and killing Kraken
+         *
+         * @param x current x coordinate
+         * @param y current y coordinate
+         * @param nOfSteps number of steps taken to get to this point
+         * @param visitedCells list of visited cells
+         */
         public static void findRec1(int x, int y, int nOfSteps, Algorithms.PairedArrayList visitedCells) {
             iterations++;
             if (nOfSteps >= maxSteps || x < 0 || y < 0 || x >= n || y >= n || mapWithKraken.get(x).get(y) == Cell.Z ||
                     mapWithKraken.get(x).get(y) == Cell.R || mapWithKraken.get(x).get(y) == Cell.KR ||
                     mapWithKraken.get(x).get(y) == Cell.K || mapWithKraken.get(x).get(y) == Cell.D ||
-                    visitedCells.contains(x, y) || iterations > maxiterations1) {
+                    visitedCells.contains(x, y) || iterations > maxIterations) {
                 return;
             }
 
             Algorithms.PairedArrayList visitedCellsCopy = new Algorithms.PairedArrayList(visitedCells);
             visitedCellsCopy.add(x, y);
-            if (x == xchest && y == ychest) {
+            if (x == xChest && y == yChest) {
                 if (shortest1 < 0 || nOfSteps < shortest1) {
                     shortest1 = nOfSteps;
                     foundPath1 = visitedCellsCopy;
@@ -888,12 +1080,134 @@ public class Main {
                 }
             }
 
-            Algorithms.PairedArrayList optimized = AreaOptimization(x, y, xchest, ychest);
+            Algorithms.PairedArrayList optimized = AreaOptimization(x, y, xChest, yChest);
 
             for (int i = 0; i < optimized.size(); i++)
                 findRec1(optimized.xCells.get(i), optimized.yCells.get(i), nOfSteps + 1, visitedCellsCopy);
         }
 
+        /**
+         * Method that finds the shortest way to get the chest with visiting Tortuga and (possibly) killing Kraken
+         */
+        public static void findShortest2() {
+            if (mapWithKraken.get(0).get(0) == Cell.JZ) {
+                shortest1 = -1;
+                return;
+            }
+
+            foundPath2 = new Algorithms.PairedArrayList();
+            tempFoundPath2 = new Algorithms.PairedArrayList();
+            noKrakenMap = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                noKrakenMap.add(new ArrayList<>());
+                for (int j = 0; j < n; j++) {
+                    noKrakenMap.get(i).add(mapWithKraken.get(i).get(j));
+                }
+            }
+            killKraken(noKrakenMap, xKraken, yKraken);
+            Algorithms.FillDangerDavy(noKrakenMap, xDavy, yDavy);
+
+            maxSteps = shortest1 > 0 ? shortest1 : n * 3 + n / 3;
+
+            shortest2t = -1;
+            iterations = 0;
+            findRec2(0, 0, 0, new Algorithms.PairedArrayList(), false, false);
+            if (shortest2t < 0) return;
+
+            shortest2 = shortest2t;
+
+            maxSteps = shortest1 > 0 ? shortest1 : n * 3 + n / 3;
+
+            iterations = 0;
+            shortest2t = -1;
+            foundPath2.remove(foundPath2.size() - 1);
+            findRec2(xTortuga, yTortuga, 0, new Algorithms.PairedArrayList(), true, false);
+            if (shortest2t < 0) {
+                shortest2 = -1;
+                return;
+            }
+            for (int i = 0; i < tempFoundPath2.size(); i++) {
+                foundPath2.add(tempFoundPath2.xCells.get(i), tempFoundPath2.yCells.get(i));
+            }
+
+            shortest2 += shortest2t;
+        }
+
+        /**
+         * Recursive method that finds the shortest way to get the chest with visiting Tortuga and (possibly) killing Kraken
+         *
+         * @param x current x coordinate
+         * @param y current y coordinate
+         * @param nOfSteps number of steps taken to get to this point
+         * @param visitedCells list of visited cells
+         * @param tortugaPassed true if Tortuga has been visited
+         * @param krakenKilled true if Kraken has been killed
+         */
+        public static void findRec2(int x, int y, int nOfSteps, Algorithms.PairedArrayList visitedCells,
+                                    boolean tortugaPassed, boolean krakenKilled) {
+            iterations++;
+            ArrayList<ArrayList<Cell>> map = krakenKilled ? noKrakenMap : mapWithKraken;
+
+
+            if (nOfSteps >= maxSteps || x < 0 || y < 0 || x >= n || y >= n || map.get(x).get(y) == Cell.Z ||
+                    map.get(x).get(y) == Cell.R || map.get(x).get(y) == Cell.D || visitedCells.contains(x, y) ||
+                    iterations > maxIterations ||
+                    ((map.get(x).get(y) == Cell.KR || map.get(x).get(y) == Cell.K) && !tortugaPassed)
+            ) {
+                return;
+            }
+
+            if (tortugaPassed && !krakenKilled)
+                krakenKilled = killKrakenInArea(x, y);
+
+            map = krakenKilled ? noKrakenMap : mapWithKraken;
+
+            if ((map.get(x).get(y) == Cell.KR || map.get(x).get(y) == Cell.K) && tortugaPassed) {
+                map = noKrakenMap;
+                krakenKilled = true;
+                if (map.get(x).get(y) == Cell.R || map.get(x).get(y) == Cell.Z) return;
+            }
+
+            Algorithms.PairedArrayList visitedCellsCopy = new Algorithms.PairedArrayList(visitedCells);
+            visitedCellsCopy.add(x, y);
+            if (x == xChest && y == yChest && tortugaPassed) {
+                if (shortest2t < 0 || nOfSteps < shortest2t) {
+                    shortest2t = nOfSteps;
+                    tempFoundPath2 = visitedCellsCopy;
+                    maxSteps = nOfSteps;
+                    return;
+                }
+            }
+
+            if (x == xTortuga && y == yTortuga && !tortugaPassed) {
+                if (shortest2t < 0 || nOfSteps < shortest2t) {
+                    shortest2t = nOfSteps;
+                    foundPath2 = visitedCellsCopy;
+                    maxSteps = nOfSteps;
+                    return;
+                }
+            }
+
+            Algorithms.PairedArrayList optimized;
+            if (tortugaPassed)
+                 optimized = AreaOptimization(x, y, xChest, yChest);
+            else
+                optimized = AreaOptimization(x, y, xTortuga, yTortuga);
+
+            for (int i = 0; i < optimized.size(); i++) {
+                findRec2(optimized.xCells.get(i), optimized.yCells.get(i), nOfSteps + 1,
+                        visitedCellsCopy, tortugaPassed, krakenKilled);
+            }
+        }
+
+        /**
+         * Method for optimizing path choosing by finding the nearest cell to the target out of the 8 cells around
+         * @param x current x coordinate
+         * @param y current y coordinate
+         * @param xDestination x coordinate of the target
+         * @param yDestination y coordinate of the target
+         * @return sorted by distance to the target list of cells
+         */
         public static Algorithms.PairedArrayList AreaOptimization(int x, int y, int xDestination, int yDestination) {
             int k1 = Math.abs((x - 1) - xDestination) + Math.abs((y - 1) - yDestination);
             int k2 = Math.abs((x - 1) - xDestination) + Math.abs(y - yDestination);
@@ -939,107 +1253,35 @@ public class Main {
             return optimized;
         }
 
-        public static void findShortest2() {
-            if (mapWithKraken.get(0).get(0) == Cell.JZ) {
-                shortest1 = -1;
-                return;
+        /**
+         * Method that checks if there's a kraken in the diagonal cells around the current cell
+         * @param x current x coordinate
+         * @param y current y coordinate
+         * @return true if there's a kraken in the diagonal cells around the current cell and false otherwise
+         */
+        public static boolean killKrakenInArea(int x, int y) {
+            if (x - 1 > 0 && y - 1 > 0 &&
+                    (mapWithKraken.get(x - 1).get(y - 1) == Cell.K || mapWithKraken.get(x - 1).get(y - 1) == Cell.KR)) {
+                return true;
             }
-
-            foundPath2 = new Algorithms.PairedArrayList();
-            tempFoundPath2 = new Algorithms.PairedArrayList();
-            noKrakenMap = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                noKrakenMap.add(new ArrayList<>());
-                for (int j = 0; j < n; j++) {
-                    noKrakenMap.get(i).add(mapWithKraken.get(i).get(j));
-                }
+            if (x - 1 > 0 && y + 1 < n &&
+                    (mapWithKraken.get(x - 1).get(y + 1) == Cell.K || mapWithKraken.get(x - 1).get(y + 1) == Cell.KR)) {
+                return true;
             }
-            killKraken(noKrakenMap, xkraken, ykraken);
-            Algorithms.FillDangerDavy(noKrakenMap, xdavy, ydavy);
-
-            maxSteps = shortest1 > 0 ? shortest1 : n * 3 + n / 3;
-
-            shortest2t = -1;
-            iterations = 0;
-            findRec2(0, 0, 0, new Algorithms.PairedArrayList(), false, false);
-            if (shortest2t < 0) return;
-
-            shortest2 = shortest2t;
-
-            maxSteps = shortest1 > 0 ? shortest1 : n * 3 + n / 3;
-
-            iterations = 0;
-            shortest2t = -1;
-            foundPath2.remove(foundPath2.size() - 1);
-            findRec2(xtortuga, ytortuga, 0, new Algorithms.PairedArrayList(), true, false);
-            if (shortest2t < 0) {
-                shortest2 = -1;
-                return;
+            if (x + 1 < n && y - 1 > 0 &&
+                    (mapWithKraken.get(x + 1).get(y - 1) == Cell.K || mapWithKraken.get(x + 1).get(y - 1) == Cell.KR)) {
+                return true;
             }
-            for (int i = 0; i < tempFoundPath2.size(); i++) {
-                foundPath2.add(tempFoundPath2.xCells.get(i), tempFoundPath2.yCells.get(i));
-            }
-
-            shortest2 += shortest2t;
+            return x + 1 < n && y + 1 < n &&
+                    (mapWithKraken.get(x + 1).get(y + 1) == Cell.K || mapWithKraken.get(x + 1).get(y + 1) == Cell.KR);
         }
 
-        public static void findRec2(int x, int y, int nOfSteps, Algorithms.PairedArrayList visitedCells,
-                                    boolean tortugaPassed, boolean krakenKilled) {
-            iterations++;
-            ArrayList<ArrayList<Cell>> map = krakenKilled ? noKrakenMap : mapWithKraken;
-
-
-            if (nOfSteps >= maxSteps || x < 0 || y < 0 || x >= n || y >= n || map.get(x).get(y) == Cell.Z ||
-                    map.get(x).get(y) == Cell.R || map.get(x).get(y) == Cell.D || visitedCells.contains(x, y) ||
-                    iterations > maxiterations2 ||
-                    ((map.get(x).get(y) == Cell.KR || map.get(x).get(y) == Cell.K) && !tortugaPassed)
-            ) {
-                return;
-            }
-
-            if (tortugaPassed && !krakenKilled)
-                krakenKilled = killKrakenInArea(x, y);
-
-            map = krakenKilled ? noKrakenMap : mapWithKraken;
-
-            if ((map.get(x).get(y) == Cell.KR || map.get(x).get(y) == Cell.K) && tortugaPassed) {
-                map = noKrakenMap;
-                krakenKilled = true;
-                if (map.get(x).get(y) == Cell.R || map.get(x).get(y) == Cell.Z) return;
-            }
-
-            Algorithms.PairedArrayList visitedCellsCopy = new Algorithms.PairedArrayList(visitedCells);
-            visitedCellsCopy.add(x, y);
-            if (x == xchest && y == ychest && tortugaPassed) {
-                if (shortest2t < 0 || nOfSteps < shortest2t) {
-                    shortest2t = nOfSteps;
-                    tempFoundPath2 = visitedCellsCopy;
-                    maxSteps = nOfSteps;
-                    return;
-                }
-            }
-
-            if (x == xtortuga && y == ytortuga && !tortugaPassed) {
-                if (shortest2t < 0 || nOfSteps < shortest2t) {
-                    shortest2t = nOfSteps;
-                    foundPath2 = visitedCellsCopy;
-                    maxSteps = nOfSteps;
-                    return;
-                }
-            }
-
-            Algorithms.PairedArrayList optimized;
-            if (tortugaPassed)
-                 optimized = AreaOptimization(x, y, xchest, ychest);
-            else
-                optimized = AreaOptimization(x, y, xtortuga, ytortuga);
-
-            for (int i = 0; i < optimized.size(); i++) {
-                findRec2(optimized.xCells.get(i), optimized.yCells.get(i), nOfSteps + 1,
-                        visitedCellsCopy, tortugaPassed, krakenKilled);
-            }
-        }
-
+        /**
+         * Method that "kills" the kraken on the map
+         * @param map map with kraken
+         * @param xKraken x coordinate of the kraken
+         * @param yKraken y coordinate of the kraken
+         */
         public static void killKraken(ArrayList<ArrayList<Cell>> map, int xKraken, int yKraken) {
             if (map.get(xKraken).get(yKraken) == Cell.KR)
                 map.get(xKraken).set(yKraken, Cell.R);
@@ -1057,71 +1299,19 @@ public class Main {
             if ((yKraken - 1 >= 0) && (map.get(xKraken).get(yKraken - 1) == Cell.Z)) {
                 map.get(xKraken).set(yKraken - 1, Cell.E);
             }
-            Algorithms.FillDangerDavy(map, xdavy, ydavy);
+            Algorithms.FillDangerDavy(map, xDavy, yDavy);
         }
 
-        public static boolean killKrakenInArea(int x, int y) {
-            if (x - 1 > 0 && y - 1 > 0 &&
-                    (mapWithKraken.get(x - 1).get(y - 1) == Cell.K || mapWithKraken.get(x - 1).get(y - 1) == Cell.KR)) {
-                return true;
-            }
-            if (x - 1 > 0 && y + 1 < n &&
-                    (mapWithKraken.get(x - 1).get(y + 1) == Cell.K || mapWithKraken.get(x - 1).get(y + 1) == Cell.KR)) {
-                return true;
-            }
-            if (x + 1 < n && y - 1 > 0 &&
-                    (mapWithKraken.get(x + 1).get(y - 1) == Cell.K || mapWithKraken.get(x + 1).get(y - 1) == Cell.KR)) {
-                return true;
-            }
-            if (x + 1 < n && y + 1 < n &&
-                    (mapWithKraken.get(x + 1).get(y + 1) == Cell.K || mapWithKraken.get(x + 1).get(y + 1) == Cell.KR)) {
-                return true;
-            }
-            return false;
-        }
-
+        /**
+         * Method that prints the path to the file
+         * @param path the path to print
+         */
         public static void printPath(Algorithms.PairedArrayList path) {
             try {
                 FileWriter myWriter = new FileWriter("outputBacktracking.txt");
-                WritePath(path, myWriter);
+                Algorithms.WritePath(path, myWriter);
             } catch (Exception ignored) {
             }
-        }
-
-        public static void WritePath(Algorithms.PairedArrayList path, FileWriter myWriter) throws IOException {
-            if (path.size() != 0) {
-                myWriter.write("Win\n" + (path.size() - 1) + "\n");
-                for (int i = 0; i < path.size(); i++) {
-                    myWriter.write("[" + path.xCells.get(i) + "," + path.yCells.get(i) + "] ");
-                }
-                myWriter.write("\n");
-                for (int i = 0; i < n * 2 + 1; i++) {
-                    myWriter.write("-");
-                }
-                myWriter.write("\n ");
-                for (int i = 0; i < n; i++) {
-                    myWriter.write(" " + i);
-                }
-                myWriter.write("\n");
-                for (int i = 0; i < n; i++) {
-                    myWriter.write(i + " ");
-                    for (int j = 0; j < n; j++) {
-                        if (path.contains(i, j)) {
-                            myWriter.write("* ");
-                        } else {
-                            myWriter.write("- ");
-                        }
-                    }
-                    myWriter.write("\n");
-                }
-                for (int i = 0; i < n * 2 + 1; i++) {
-                    myWriter.write("-");
-                }
-            } else {
-                myWriter.write("Lose");
-            }
-            myWriter.write("\n");
-            myWriter.close();
         }
     }
 }
